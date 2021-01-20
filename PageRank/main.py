@@ -1,18 +1,20 @@
+# @Author   Justin Noddell
+
 # def pagerank( G ):
 # params    G *** a dict of pages and their respective links
 # returns   a dict of pages and their respective pagerank values
 #
-# This purpose of this function is to execute the PageRank function
+# the purpose of this function is to execute the PageRank function
 def pagerank( G ):
 
     P = G.keys()        # pages
     L = G.values()      # links
     I = dict()          # current PageRank estimate -- k:page, v:PageRank estimate
     R = dict()          # better, resulting PageRank estimate -- k:page, v:PageRank estimate
-    LAMBDA = 0.20       # Chance of 'surprise me' button [go to random page]
-    TAU = 0.02          # Threshold of convergence
+    LAMBDA = 0.20       # chance of 'surprise me' button [go to random page]
+    TAU = 0.02          # threshold of convergence
     
-    # Start each page to be equally likely, initialize R with values
+    # start each page to be equally likely, initialize R with values
     for p in P:
         I[p] = 1 / len(P)
         R[p] = 0
@@ -20,12 +22,12 @@ def pagerank( G ):
     converged = False
     while not converged:
         converged = True
-        # Each page has a LAMBDA/len(P) chance of random selection
-        for r in R:
+        # each page has a LAMBDA / len(P) chance of random selection
+        for r in R:         
             R[r] = LAMBDA / len(P)
+        # Find the set of pages that such that (p, q) belong to L and q belongs to P
         for p in P:
-            Q = []          # the set of pages that such that (p, q) belong to L and q belongs to P
-            # Populate Q
+            Q = []          
             for q in G[p]:
                 if q in P and len(G[q]) > 0:
                     Q.append( q )
@@ -44,7 +46,7 @@ def pagerank( G ):
             if abs(R[p] - I[p]) > TAU:
                 converged = False
 
-        # Update PageRank estimate
+        # update PageRank estimate
         for r in R:
             I[r] = R[r]
         
@@ -54,13 +56,13 @@ def pagerank( G ):
 # params:   src *** path to file detailing pages and links
 # returns   a dict of pages and their respective links
 #
-# The purpose of this function is to take a text file as input, detailing pages and links, store and return that data
+# the purpose of this function is to take a text file as input, detailing pages and links, store and return that data
 def create_graph( src ):
 
     G = dict()
-    in_file = open( src, "r" )
-    # Iterate through file
-    for line in in_file:
+    infile = open( src, "r" )
+    # iterate by line
+    for line in infile:
         page = ""
         link = ""
         tab_reached = False
@@ -80,9 +82,25 @@ def create_graph( src ):
         if link not in G.keys():
             G[link] = []
     # close file
-    in_file.close()
+    infile.close()
 
     return G
+
+# def write_to_file():
+# params    R *** dict of pages and their PageRank values
+# does not return
+#
+# formats, writes results to output.txt
+def write_to_file( R ):
+
+    outfile = open("output.txt", "w")
+
+    for k, v in R.items():
+        output = k + "\t" + str(v) + "\n"
+        outfile.write( output )
+
+    # close file
+    outfile.close()
 
 # def main():
 # params    none
@@ -95,7 +113,7 @@ def main():
 
     R = pagerank( G )
 
-    print( R )
+    write_to_file( R )
 
     return 0
 
