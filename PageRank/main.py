@@ -40,8 +40,9 @@ def pagerank( G ):
                     R[q] += delta
 
         # check for convergence
-        if abs(R[p] - I[p]) > TAU:
-            converged = False
+        for p in P:
+            if abs(R[p] - I[p]) > TAU:
+                converged = False
 
         # Update PageRank estimate
         for r in R:
